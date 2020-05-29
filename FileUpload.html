@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rushabh's Cloud</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>  
+
+    <style>
+      .fileUpload {
+        display: flex;
+        min-height: 70vh;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      #uploader{
+        -webkit-appearance: none;
+        appearance: none;
+        width: 30%;
+        margin-bottom: 10px;        
+      }
+    </style>
+</head>
+<body>  
+    
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Rushabh's Cloud</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown"><a href="FileDisplay.html">Images</a>
+            </li>
+            <li class="active"><a href="FileUpload.html">Upload Images</a></li>
+          </ul>
+        </div>
+      </nav>
+
+
+  <div class="fileUpload">
+
+    <progress value="0" max="100" id="uploader">0%</progress>
+    <br>
+    <label class="file">
+        <input type="file" id="fileUploadButton" aria-label="File browser example">
+        <span class="file-custom"></span>
+      </label> 
+
+      
+    </div>
+      <footer>
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+          <a href="#"> Rushabh Chalikwar</a>
+        </div>
+      </footer>
+ <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBXySKvnOQ2VRqdtZ2bLe3uVcZzGs8_XVA",
+    authDomain: "myowncloud-8caee.firebaseapp.com",
+    databaseURL: "https://myowncloud-8caee.firebaseio.com",
+    projectId: "myowncloud-8caee",
+    storageBucket: "myowncloud-8caee.appspot.com",
+    messagingSenderId: "585124780417",
+    appId: "1:585124780417:web:7643489c61e6a8cc4fb080",
+    measurementId: "G-T89YSHJL88"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  var fileUploadButton = document.getElementById('fileUploadButton');
+
+  fileUploadButton.addEventListener('change' , function(e){
+      var file = e.target.files[0];
+
+      var storageRef = firebase.storage().ref('AkzoProject/' + file.name);
+
+      var task = storageRef.put(file);
+      
+      task.on('state_changed',
+        function progress(snapshot){
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            uploader.value = percentage;
+            if(percentage == 100){
+              alert("File uploaded successfully")             
+            }
+        },
+        
+      )
+
+     
+  })
+</script>
+
+</body>
+</html>

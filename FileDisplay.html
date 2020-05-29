@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rushabh's Cloud</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+      .card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+    </style>
+</head>
+<body>    
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Rushabh's Cloud</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li class="active" class="dropdown"><a href="FileDisplay.html">Images</a>
+            </li>
+            <li><a href="FileUpload.html">Upload Images</a></li>
+          </ul>
+        </div>
+      </nav>
+      
+      
+      <div class="table-responsive">
+          <table class="table table-hover" id = "fileList">
+            <tbody>
+                <thead>
+                    <tr>
+                     
+                    </tr>
+                  </thead>
+            </tbody>
+      </div>
+
+      <footer> 
+      <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="#"> Rushabh Chalikwar</a>
+      </div>
+    </footer>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script>
+
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBXySKvnOQ2VRqdtZ2bLe3uVcZzGs8_XVA",
+    authDomain: "myowncloud-8caee.firebaseapp.com",
+    databaseURL: "https://myowncloud-8caee.firebaseio.com",
+    projectId: "myowncloud-8caee",
+    storageBucket: "myowncloud-8caee.appspot.com",
+    messagingSenderId: "585124780417",
+    appId: "1:585124780417:web:7643489c61e6a8cc4fb080",
+    measurementId: "G-T89YSHJL88"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  var storageRef = firebase.storage().ref('AkzoProject/');
+
+  storageRef.listAll().then(function(result){
+    result.items.forEach(function(imageRef){
+         console.log(imageRef.name)
+         displayImage(imageRef);
+    })
+  })
+
+
+  var count = 0;
+  var x;
+
+  function displayImage(imageRef){
+    imageRef.getDownloadURL().then(function(url){
+      var c1;
+      var c2;
+      var c3;
+
+      if(count % 3 == 0){
+        x=document.getElementById('fileList').insertRow(1);
+      }
+
+      c1=x.insertCell(0);
+        c2=x.insertCell(1);
+        c3=x.insertCell(2);
+
+
+        //c2.innerHTML="<img src ="+ url +" height='200' width='200' alt = 'Other File Format'> <br>";
+        //c1.innerHTML= "<a href = " + url + ">" + imageRef.name + " </a>"
+        //c3.innerHTML= "<button onClick = deleteFile('"+ imageRef.name +"')> Delete </button>"
+        
+        if(count % 3 == 2){
+          c1.innerHTML = "<div class='card'><img src="+ url +" alt='Other File Format' style='height:400px;width:300px'><hr><a href = " + url + ">" + imageRef.name + " </a><p><button onClick = deleteFile('"+ imageRef.name +"')> Delete </button></p></div>"
+        }
+        else if(count % 3 == 1){
+          c2.innerHTML = "<div class='card'><img src="+ url +" alt='Other File Format' style='height:400px;width:300px'><hr><a href = " + url + ">" + imageRef.name + " </a><p><button onClick = deleteFile('"+ imageRef.name +"')> Delete </button></p></div>"
+        }
+        else if (count % 3 == 0){ 
+          c3.innerHTML = "<div class='card'><img src="+ url +" alt='Other File Format' style='height:400px;width:300px'><hr><a href = " + url + ">" + imageRef.name + " </a><p><button onClick = deleteFile('"+ imageRef.name +"')> Delete </button></p></div>"
+        }
+        count++;
+        })
+  }
+
+  function deleteFile(imageName){
+    var storageRef = firebase.storage().ref('AkzoProject/' + imageName);
+
+    storageRef.delete().then(function() {
+      location.reload();
+      alert("File deleted successfully")
+}).catch(function(error) {
+  alert("Something went Wrong")
+});
+  }
+</script>
+</body>
+</html>
